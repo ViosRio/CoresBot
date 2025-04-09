@@ -56,57 +56,12 @@ greeting_message = ""
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-CHANNEL_ID = "-1002384653201"  # Kanal ID'nizi buraya ekledim
-CHANNEL_LINK = "https://t.me/BowzerHack"  # Kanal linki
-
-def is_user_subscribed(user_id):
-    """ Kullanıcının kanala abone olup olmadığını kontrol eder. """
-    try:
-        chat_member = bot.get_chat_member(CHANNEL_ID, user_id)
-        status = chat_member.status
-
-        # Kullanıcının kanalda olup olmadığını kontrol et
-        return status in ["member", "administrator", "creator"]
-    except telebot.apihelper.ApiTelegramException as e:
-        print(f"Kanal kontrol hatası: {e}")
-        return False  # Eğer hata alırsak kullanıcı kanalda değilmiş gibi davranıyoruz
-    except Exception as e:
-        print(f"Bilinmeyen hata: {e}")
-        return False
-
 @bot.message_handler(commands=['start'])
 def botu_baslatma(message):
     global greeting_message
 
     user_id = message.from_user.id
     chat_id = message.chat.id
-
-    # Kullanıcının kanala üye olup olmadığını kontrol et
-    if not is_user_subscribed(user_id):
-        markup = InlineKeyboardMarkup()
-        join_button = InlineKeyboardButton("📢 Kanala Katıl", url=CHANNEL_LINK)
-        check_button = InlineKeyboardButton("✅ Katıldım", callback_data="check_subscription")
-        markup.add(join_button)
-        markup.add(check_button)
-
-        bot.send_message(
-            chat_id,
-            f"❌ Botu kullanabilmek için önce kanalımıza katılmalısın!\n\n📢 **Kanalımız:** [BowzerHack]({CHANNEL_LINK})",
-            parse_mode="Markdown",
-            disable_web_page_preview=True,
-            reply_markup=markup
-        )
-        return  # Kullanıcı kanalda değilse işlemi durdur
-
-    # Kullanıcı kanaldaysa devam et
-    video_url = 'https://lab-noted-tuna.ngrok-free.app//efebabey.mp4'
-
-    try:
-        bot.send_video(chat_id, video_url)
-    except telebot.apihelper.ApiTelegramException as e:
-        if "Forbidden: user is deactivated" in str(e):
-            print(f"Kullanıcı devre dışı: {user_id}")
-            return
 
     username = message.from_user.username
     greeting_message = f"{get_greeting()} @{username}! 👋\n\nBotu kullanmaya başlamak için aşağıdaki butonları kullanabilirsin. 📋"
@@ -119,19 +74,6 @@ def botu_baslatma(message):
         if "Forbidden: user is deactivated" in str(e):
             print(f"Kullanıcı devre dışı: {user_id}")
             return
-
-@bot.callback_query_handler(func=lambda call: call.data == "check_subscription")
-def check_subscription(call):
-    """ Kullanıcı 'Katıldım' butonuna bastığında kontrol edilir. """
-    user_id = call.from_user.id
-    chat_id = call.message.chat.id
-
-    if is_user_subscribed(user_id):
-        bot.send_message(chat_id, "✅ Tebrikler! Kanalımıza katıldın. Artık botu kullanabilirsin.")
-        bot.delete_message(chat_id, call.message.message_id)  # Eski mesajı sil
-        botu_baslatma(call.message)  # Start fonksiyonunu tekrar çalıştır
-    else:
-        bot.answer_callback_query(call.id, "❌ Henüz kanala katılmadın. Lütfen önce kanala katıl!")
 
 # Ana Menü
 def main_menu(message):
@@ -152,7 +94,7 @@ def main_menu(message):
 @bot.callback_query_handler(func=lambda call: call.data == "bilgi")
 def send_info(call):
     # Bilgi mesajını gönderiyoruz
-    info_message = "ℹ️ Bot Hakkında Bilgi\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nMerhaba! Ben, Bowzer. İşlevim Bilgi Sorgulamak. İşte botum hakkında bazı bilgiler:\n💡 Amaç: Kullanıcıları bilgilendirmek ve çeşitli işlemleri kolaylaştırmak.\n🔧 Yapımcı: @bowzer_sik\n👨‍💻 Bot Geliştiricisi: @bowzer_sik\n🌐 Servis API: Bowzer Check\n\n💬 Komutlar:\n   ➡️ /tc: TC bilgilerini sorgulamak.\n   ➡️ /sorgu: Ad Soyad İl İlçe İle TC bilgilerini sorgulamak.\n   ➡️ /sorgu2: Ad Soyad İl İle TC bilgilerini sorgulamak.\n   ➡️ /aile: Aile bilgilerini sorgulamak.\n   ➡️ /adres: TC ile Adres Bilgilerini sorgulamak.\n   ➡️ /okulno: TC ile Okul Bilgilerini sorgulamak.\n   ➡️ /vesika: TC ile Vesikalık Bilgilerini sorgulamak.\n   ➡️ /isyeri: TC ile İşyeri Bilgilerini sorgulamak.\n   ➡️ /yapımcılar: Yapımcı bilgilerini almak.\n\n⚙️ Bot hakkında herhangi bir sorunuz varsa, lütfen @bowzer_sik ile iletişime geçin."
+    info_message = "ℹ️ Bot Hakkında Bilgi\n\n Merhaba! Ben, Bowzer. İşlevim Bilgi Sorgulamak. İşte botum hakkında bazı bilgiler:\n💡 Amaç: Kullanıcıları bilgilendirmek ve çeşitli işlemleri kolaylaştırmak.\n🔧 Yapımcı: @bowzer_sik\n👨‍💻 Bot Geliştiricisi: @bowzer_sik\n🌐 Servis API: Bowzer Check\n\n💬 Komutlar:\n   ➡️ /tc: TC bilgilerini sorgulamak.\n   ➡️ /sorgu: Ad Soyad İl İlçe İle TC bilgilerini sorgulamak.\n  ➡️ /aile: Aile bilgilerini sorgulamak.\n   ➡️ /adres: TC ile Adres Bilgilerini sorgulamak.\n   ➡️ /okulno: TC ile Okul Bilgilerini sorgulamak.\n   ➡️ /vesika: TC ile Vesikalık Bilgilerini sorgulamak.\n   ➡️ /isyeri: TC ile İşyeri Bilgilerini sorgulamak.\n   ➡️ /yapımcılar: Yapımcı bilgilerini almak.\n\n⚙️ Bot hakkında herhangi bir sorunuz varsa, lütfen @bowzer_sik ile iletişime geçin."
     
     # Inline butonları hazırlıyoruz
     markup = types.InlineKeyboardMarkup()
@@ -220,17 +162,12 @@ def phone_communication_menu():
 def entertainment_menu():
     markup = types.InlineKeyboardMarkup()
 
-    penis_button = types.InlineKeyboardButton("😂 Penis Boyu", callback_data="entertainment_penis")
-    ayak_button = types.InlineKeyboardButton("👣 Ayak Boyutu", callback_data="entertainment_ayak")
     yaz_button = types.InlineKeyboardButton("📝 Yazı Yaz", callback_data="entertainment_yaz")
-    nude_button = types.InlineKeyboardButton("❤ Nude", callback_data="entertainment_nude")
     euro_button = types.InlineKeyboardButton("💶 Euro", callback_data="entertainment_euro")
     dolar_button = types.InlineKeyboardButton("💵 Dolar", callback_data="entertainment_dolar")
     
     back_button = types.InlineKeyboardButton("↩️ Geri Dön", callback_data="geri_don")
 
-    markup.add(penis_button, ayak_button)
-    markup.add(yaz_button, nude_button)
     markup.add(euro_button, dolar_button)
     markup.add(back_button)
 
@@ -372,35 +309,11 @@ def callback_query(call):
         bot.delete_message(call.message.chat.id, call.message.message_id)
 
     # Eğlence Butonları
-    elif call.data == "entertainment_penis":
-        bot.send_message(call.message.chat.id, """
-        😂 /penis Komutu Kullanımı:
-        - Çavuşun boyunu gösterir. Sadece eğlencelik bir komuttur.
-        - Format: `/penis [TC]`
-        """, reply_markup=commands_menu(), parse_mode="Markdown")
-        bot.delete_message(call.message.chat.id, call.message.message_id)
-
-    elif call.data == "entertainment_ayak":
-        bot.send_message(call.message.chat.id, """
-        👣 /ayak Komutu Kullanımı:
-        - Kişinin ayak numarasını öğrenmek için bu komutu kullanabilirsiniz.
-        - Format: `/ayak [TC]`
-        """, reply_markup=commands_menu(), parse_mode="Markdown")
-        bot.delete_message(call.message.chat.id, call.message.message_id)
-
     elif call.data == "entertainment_yaz":
         bot.send_message(call.message.chat.id, """
         📝 /yaz Komutu Kullanımı:
         - Yazdığınız metni özel tasarımda oluşturur.
         - Format: `/yaz <metin>`
-        """, reply_markup=commands_menu(), parse_mode="Markdown")
-        bot.delete_message(call.message.chat.id, call.message.message_id)
-
-    elif call.data == "entertainment_nude":
-        bot.send_message(call.message.chat.id, """
-        ❤ /nude Komutu Kullanımı:
-        - Random Nude almak için kullanabilirsiniz.
-        - Format: `/nude`
         """, reply_markup=commands_menu(), parse_mode="Markdown")
         bot.delete_message(call.message.chat.id, call.message.message_id)
 
@@ -420,8 +333,6 @@ def callback_query(call):
         """, reply_markup=commands_menu(), parse_mode="Markdown")
         bot.delete_message(call.message.chat.id, call.message.message_id)
 
-
-CHANNEL_ID = "@BowzerHack"
 
 # İstek sayacı ve zamanlayıcı için değişkenler
 last_request_time = 0
@@ -444,15 +355,6 @@ def sorgu(message):
         user_id = message.from_user.id
 
         # Kanal kontrolü
-        try:
-            member_status = bot.get_chat_member(CHANNEL_ID, user_id).status
-            if member_status not in ["member", "administrator", "creator"]:
-                bot.reply_to(message, f"Bu komutu kullanabilmek için {CHANNEL_ID} kanalına katılmalısınız.")
-                return
-        except Exception:
-            bot.reply_to(message, "Kanal bilgileri alınırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.")
-            return
-
         parameters = message.text.split()[1:]
         if len(parameters) < 2:
             bot.reply_to(message, "Geçersiz komut. Kullanım: /sorgu Ad Soyad [İl] [İlçe]")
@@ -536,15 +438,6 @@ def sorgu2(message):
         user_id = message.from_user.id
 
         # Kanal kontrolü
-        try:
-            member_status = bot.get_chat_member(CHANNEL_ID, user_id).status
-            if member_status not in ["member", "administrator", "creator"]:
-                bot.reply_to(message, f"Bu komutu kullanabilmek için {CHANNEL_ID} kanalına katılmalısınız.")
-                return
-        except Exception:
-            bot.reply_to(message, "Kanal bilgileri alınırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.")
-            return
-
         parameters = message.text.split()[1:]
         if len(parameters) < 3:
             bot.reply_to(message, "Geçersiz komut. Kullanım: /sorgu2 Ad Soyad İl")
@@ -608,9 +501,7 @@ def sorgu2(message):
         print(f"Kritik Hata: {str(e)}")
         bot.reply_to(message, "Sistem hatası oluştu. Lütfen yöneticiye bildirin.")
 
-import requests
-
-CHANNEL_ID = "@BowzerHack"  # Kanalın kullanıcı adı
+import request
 
 @bot.message_handler(commands=['vefat'])
 def vefat(message):
@@ -619,11 +510,6 @@ def vefat(message):
         user_id = message.from_user.id
 
         # Kullanıcının kanalda olup olmadığını kontrol et
-        member_status = bot.get_chat_member(CHANNEL_ID, user_id).status
-        if member_status not in ["member", "administrator", "creator"]:
-            bot.reply_to(message, f"Bu komutu kullanabilmek için {CHANNEL_ID} kanalına katılmalısınız.")
-            return
-
         parts = message.text.split()
         if len(parts) < 2:
             bot.reply_to(message, "TC Kimlik No Giriniz")
@@ -666,21 +552,7 @@ def vefat(message):
 @bot.message_handler(commands=['okulno'])
 def okulno(message):
     try:
-        # Kullanıcının ID'sini al
-        user_id = message.from_user.id
-        channel_username = "@BowzerHack"  # Kontrol edilecek kanalın kullanıcı adı (örnek: @resmikanal)
-
-        # Kullanıcının kanalda olup olmadığını kontrol et
-        chat_member = bot.get_chat_member(channel_username, user_id)
-        if chat_member.status in ["left", "kicked"]:  # Kullanıcı kanalda değilse
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {channel_username} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{channel_username.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
+        # Kontrol edilecek kanalın kullanıcı adı (örnek: @resmikanal)
 
         # Kullanıcının mesajını işle
         parts = message.text.split()
@@ -841,18 +713,6 @@ def aile_sorgu(message):
 def adres(message):
     try:
         # 1. Kanal üyelik kontrolü
-        user_id = message.from_user.id
-        channel_username = "@BowzerHack"
-        
-        try:
-            chat_member = bot.get_chat_member(channel_username, user_id)
-            if chat_member.status in ["left", "kicked"]:
-                bot.reply_to(message, f"⚠️ Önce kanala katılın: https://t.me/{channel_username.lstrip('@')}",
-                           parse_mode="Markdown", disable_web_page_preview=True)
-                return
-        except Exception as e:
-            bot.reply_to(message, "⚠️ Kanal kontrolü başarısız. Lütfen daha sonra deneyin.")
-            return
 
         # 2. TC No format kontrolü
         if len(message.text.split()) < 2:
@@ -925,20 +785,6 @@ def adres(message):
 def isyeri_command(message):
     try:
         # Kullanıcının ID'sini al
-        user_id = message.from_user.id
-        channel_username = "@BowzerHack"  # Kontrol edilecek kanalın kullanıcı adı (örnek: @resmikanal)
-
-        # Kullanıcının kanalda olup olmadığını kontrol et
-        chat_member = bot.get_chat_member(channel_username, user_id)
-        if chat_member.status in ["left", "kicked"]:  # Kullanıcı kanalda değilse
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {channel_username} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{channel_username.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
 
         # Kullanıcının mesajını işle
         parts = message.text.split()
@@ -991,21 +837,7 @@ import os
 def vesika_command(message):
     try:
         # Kullanıcının ID'sini al
-        user_id = message.from_user.id
-        channel_username = "@BowzerHack"  # Kontrol edilecek kanalın kullanıcı adı (örnek: @resmikanal)
-
-        # Kullanıcının kanalda olup olmadığını kontrol et
-        chat_member = bot.get_chat_member(channel_username, user_id)
-        if chat_member.status in ["left", "kicked"]:  # Kullanıcı kanalda değilse
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {channel_username} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{channel_username.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
-
+        
         # Kullanıcının mesajını işle
         parts = message.text.split()
         if len(parts) < 2:
@@ -1072,21 +904,7 @@ import requests
 @bot.message_handler(commands=['gsmtc'])
 def gsmtc(message):
     try:
-        # Kullanıcının ID'sini al
-        user_id = message.from_user.id
-        channel_username = "@BowzerHack"  # Kontrol edilecek kanalın kullanıcı adı (örnek: @resmikanal)
-
-        # Kullanıcının kanalda olup olmadığını kontrol et
-        chat_member = bot.get_chat_member(channel_username, user_id)
-        if chat_member.status in ["left", "kicked"]:  # Kullanıcı kanalda değilse
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {channel_username} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{channel_username.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
+        # Kullanıcının ID'sini 
 
         # Kullanıcının mesajını işle
         parts = message.text.split()
@@ -1131,20 +949,6 @@ import requests
 def tcgsm(message):
     try:
         # Kullanıcının ID'sini al
-        user_id = message.from_user.id
-        channel_username = "@BowzerHack"  # Kontrol edilecek kanalın kullanıcı adı (örnek: @resmikanal)
-
-        # Kullanıcının kanalda olup olmadığını kontrol et
-        chat_member = bot.get_chat_member(channel_username, user_id)
-        if chat_member.status in ["left", "kicked"]:  # Kullanıcı kanalda değilse
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {channel_username} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{channel_username.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
 
         # Kullanıcının mesajını işle
         parts = message.text.split()
@@ -1188,20 +992,6 @@ def tcgsm(message):
 def öperator(message):
     try:
         # Kullanıcının ID'sini al
-        user_id = message.from_user.id
-        channel_username = "@BowzerHack"  # Kontrol edilecek kanalın kullanıcı adı (örnek: @resmikanal)
-
-        # Kullanıcının kanalda olup olmadığını kontrol et
-        chat_member = bot.get_chat_member(channel_username, user_id)
-        if chat_member.status in ["left", "kicked"]:  # Kullanıcı kanalda değilse
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {channel_username} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{channel_username.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
             
         parts = message.text.split()
         if len(parts) < 2:
@@ -1438,7 +1228,6 @@ def iban_sorgu(message):
 
 
 # Kontrol edilecek kanalın kullanıcı adı
-CHANNEL_USERNAME = "@BowzerHack"
 
 @bot.message_handler(commands=['yaz'])
 def yaz_command(message):
@@ -1484,7 +1273,6 @@ def yaz_command(message):
 
 
 # Kontrol edilecek kanalın kullanıcı adı
-CHANNEL_USERNAME = "@BowzerHack"
 
 @bot.message_handler(commands=['dolar'])
 def doviz(message):
@@ -1518,24 +1306,11 @@ def doviz(message):
 
 
 # Kontrol edilecek kanalın kullanıcı adı
-CHANNEL_USERNAME = "@BowzerHack"
 
 @bot.message_handler(commands=['euro'])
 def euro(message):
     try:
         user_id = message.from_user.id  # Kullanıcının ID'sini al
-        chat_member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
-
-        # Kullanıcı kanalda değilse
-        if chat_member.status in ["left", "kicked"]:
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {CHANNEL_USERNAME} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{CHANNEL_USERNAME.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
 
         # API'den euro kuru verisini çek
         response = requests.get("https://tilki.dev/api/euro")
@@ -1553,52 +1328,6 @@ def euro(message):
 
 
 # Kontrol edilecek kanalın kullanıcı adı
-CHANNEL_USERNAME = "@BowzerHack"
-
-# Rastgele gönderilecek görsellerin URL listesi
-FOTO = [
-    "https://resimlink.com/M09WvIiAq", "https://resimlink.com/artu1NJOd",
-    "https://resimlink.com/fAVMQBj", "https://resimlink.com/7YbXADqalQ",
-    "https://resimlink.com/BtJU-qp", "https://resimlink.com/iZKHPQap",
-    "https://resimlink.com/3E-tnF", "https://resimlink.com/d9AEVon",
-    "https://resimlink.com/uIk6VG-U", "https://resimlink.com/sv6exf",
-    "https://resimlink.com/dkorWjVY", "https://resimlink.com/DZwf8JG",
-    "https://resimlink.com/HOP_T3u0SJ", "https://resimlink.com/nesitHYhW",
-    "https://resimlink.com/NdtuLsycSPa", "https://resimlink.com/-c91GjS",
-    "https://resimlink.com/Ewubg1A8DyHr", "https://resimlink.com/XH_TK92a",
-    "https://resimlink.com/omqrk", "https://resimlink.com/Bc9zEb8T-A",
-    "https://resimlink.com/1Nzfidvr", "https://resimlink.com/arAz4",
-    "https://resimlink.com/8wmF-h0K", "https://resimlink.com/UHW_bz8T",
-    "https://resimlink.com/H6-Tpv9f", "https://resimlink.com/3yVH8",
-    "https://resimlink.com/-mHo18L", "https://resimlink.com/WjOmcLu",
-    "https://resimlink.com/4mTfKl", "https://resimlink.com/4HebC17m",
-    "https://resimlink.com/cIKQaA254R3", "https://resimlink.com/iuaNIgjT",
-    "https://resimlink.com/fuigsDra", "https://resimlink.com/IZuDJ-M46OkV",
-    "https://resimlink.com/aB4FZIRTXuj", "https://resimlink.com/SOhWf",
-    "https://resimlink.com/b-0m9GK", "https://resimlink.com/TsutroYIG",
-    "https://resimlink.com/I3bos", "https://resimlink.com/e6pHkL8A"
-]
-
-@bot.message_handler(commands=['nude'])
-def send_random_image(message):
-    try:
-        user_id = message.from_user.id  # Kullanıcının ID'sini al
-        chat_member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
-
-        # Kullanıcı kanalda değilse
-        if chat_member.status in ["left", "kicked"]:
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {CHANNEL_USERNAME} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{CHANNEL_USERNAME.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
-
-        # Rastgele bir görsel seç ve gönder
-        random_url = random.choice(FOTO)
-        bot.send_photo(message.chat.id, random_url)
 
     except Exception as e:
         bot.send_message(message.chat.id, f"*⚠️ Bir hata oluştu:* `{e}`", parse_mode="Markdown")
