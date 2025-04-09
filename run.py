@@ -56,6 +56,7 @@ greeting_message = ""
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+# START
 @bot.message_handler(commands=['start'])
 def botu_baslatma(message):
     global greeting_message
@@ -63,8 +64,13 @@ def botu_baslatma(message):
     user_id = message.from_user.id
     chat_id = message.chat.id
 
-    username = message.from_user.username
+    username = message.from_user.username or "kullanıcı"
     greeting_message = f"{get_greeting()} @{username}! 👋\n\nBotu kullanmaya başlamak için aşağıdaki butonları kullanabilirsin. 📋"
+
+    rank = get_rank(user_id)
+    rank_message = f""
+
+    bot.send_message(chat_id, f"{greeting_message}\n\n{rank_message}", reply_markup=main_menu(message))
 
 # Ana Menü
 def main_menu(message):
