@@ -1295,7 +1295,5 @@ def euro(message):
 
 
 # FİNİSH
-except Exception as e:
-        bot.send_message(message.chat.id, f"*⚠️ Bir hata oluştu:* `{e}`", parse_mode="Markdown")
 
 bot.polling()
