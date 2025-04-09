@@ -165,8 +165,6 @@ def entertainment_menu():
     
     back_button = types.InlineKeyboardButton("↩️ Geri Dön", callback_data="geri_don")
 
-    markup.add(penis_button, ayak_button)
-    markup.add(yaz_button, nude_button)
     markup.add(euro_button, dolar_button)
     markup.add(back_button)
 
