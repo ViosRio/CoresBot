@@ -94,7 +94,7 @@ def main_menu(message):
 @bot.callback_query_handler(func=lambda call: call.data == "bilgi")
 def send_info(call):
     # Bilgi mesajını gönderiyoruz
-    info_message = "ℹ️ Bot Hakkında Bilgi\n\n Merhaba! Ben, Bowzer. İşlevim Bilgi Sorgulamak. İşte botum hakkında bazı bilgiler:\n💡 Amaç: Kullanıcıları bilgilendirmek ve çeşitli işlemleri kolaylaştırmak.\n🔧 Yapımcı: @bowzer_sik\n👨‍💻 Bot Geliştiricisi: @bowzer_sik\n🌐 Servis API: Bowzer Check\n\n💬 Komutlar:\n   ➡️ /tc: TC bilgilerini sorgulamak.\n   ➡️ /sorgu: Ad Soyad İl İlçe İle TC bilgilerini sorgulamak.\n  ➡️ /aile: Aile bilgilerini sorgulamak.\n   ➡️ /adres: TC ile Adres Bilgilerini sorgulamak.\n   ➡️ /okulno: TC ile Okul Bilgilerini sorgulamak.\n   ➡️ /vesika: TC ile Vesikalık Bilgilerini sorgulamak.\n   ➡️ /isyeri: TC ile İşyeri Bilgilerini sorgulamak.\n   ➡️ /yapımcılar: Yapımcı bilgilerini almak.\n\n⚙️ Bot hakkında herhangi bir sorunuz varsa, lütfen @bowzer_sik ile iletişime geçin."
+    info_message = "ℹ️ Bot Hakkında Bilgi\n\n Merhaba! Ben, Bowzer. İşlevim Bilgi Sorgulamak. İşte botum hakkında bazı bilgiler:\n\n💡 Amaç: Kullanıcıları bilgilendirmek ve çeşitli işlemleri kolaylaştırmak.\n\n🔧 Yapımcı: @bowzer_sik\n\n👨‍💻 Bot Geliştiricisi: @bowzer_sik\n\n🌐 Servis API: Bowzer Check\n\n💬 Komutlar:\n\n ➡️ /tc: TC bilgilerini sorgulamak.\n\n ➡️ /sorgu: Ad Soyad İl İlçe İle TC bilgilerini sorgulamak.\n\n ➡️ /aile: Aile bilgilerini sorgulamak.\n\n ➡️ /adres: TC ile Adres Bilgilerini sorgulamak.\n\n ➡️ /okulno: TC ile Okul Bilgilerini sorgulamak.\n\n ➡️ /vesika: TC ile Vesikalık Bilgilerini sorgulamak.\n\n ➡️ /isyeri: TC ile İşyeri Bilgilerini sorgulamak.\n\n ➡️ /yapımcılar: Yapımcı bilgilerini almak.\n\n⚙️ Bot hakkında herhangi bir sorunuz varsa, lütfen @bowzer_sik ile iletişime geçin."
     
     # Inline butonları hazırlıyoruz
     markup = types.InlineKeyboardMarkup()
@@ -162,9 +162,9 @@ def phone_communication_menu():
 def entertainment_menu():
     markup = types.InlineKeyboardMarkup()
 
-    yaz_button = types.InlineKeyboardButton("📝 Yazı Yaz", callback_data="entertainment_yaz")
-    euro_button = types.InlineKeyboardButton("💶 Euro", callback_data="entertainment_euro")
-    dolar_button = types.InlineKeyboardButton("💵 Dolar", callback_data="entertainment_dolar")
+    yaz_button = types.InlineKeyboardButton("📝 PROXY GNR", callback_data="entertainment_yaz")
+    euro_button = types.InlineKeyboardButton("🔰 İG: STORY", callback_data="entertainment_euro")
+    dolar_button = types.InlineKeyboardButton("🔰TT: HASTAG", callback_data="entertainment_dolar")
     
     back_button = types.InlineKeyboardButton("↩️ Geri Dön", callback_data="geri_don")
 
@@ -192,7 +192,7 @@ def callback_query(call):
 
     elif call.data == "entertainment_menu":
         # Eğlence Menüsüne Yönlendir
-        bot.send_message(call.message.chat.id, "🎉 Eğlence komutları için aşağıdaki seçenekleri kullanabilirsiniz:", reply_markup=entertainment_menu())
+        bot.send_message(call.message.chat.id, "⭐ Eğlenceli Dükkan Komutları İçin Aşağıdaki Seçenekleri kullanabilirsiniz:", reply_markup=entertainment_menu())
         bot.delete_message(call.message.chat.id, call.message.message_id)
 
     elif call.data == "geri_don":
@@ -311,15 +311,15 @@ def callback_query(call):
     # Eğlence Butonları
     elif call.data == "entertainment_yaz":
         bot.send_message(call.message.chat.id, """
-        📝 /yaz Komutu Kullanımı:
-        - Yazdığınız metni özel tasarımda oluşturur.
-        - Format: `/yaz <metin>`
+        📝 Proxy Kullanımı:
+        - Socks4, Socks5 İçin Apiler.
+        - Format: [ /proxy ]
         """, reply_markup=commands_menu(), parse_mode="Markdown")
         bot.delete_message(call.message.chat.id, call.message.message_id)
 
     elif call.data == "entertainment_euro":
         bot.send_message(call.message.chat.id, """
-        💶 /euro Komutu Kullanımı:
+        🧩 İG : Kullanımı:
         - Güncel Euro kurunu gösterir.
         - Format: `/euro`
         """, reply_markup=commands_menu(), parse_mode="Markdown")
@@ -1060,7 +1060,7 @@ def handle_sms(message):
     try:
         # Giriş kontrolü
         if len(message.text.split()) != 2:
-            bot.reply_to(message, "⚠️ Kullanım: /sms 5XXXXXXXXX\nÖrnek: /sms 5551234567")
+            bot.reply_to(message, "⚠️ Kullanım: \n\n [ /sms 5449090000 ]")
             return
 
         phone = message.text.split()[1]
@@ -1247,17 +1247,17 @@ def yaz_command(message):
             return  # Kullanıcı kanala katılmadığı için işlemi durdur
 
         # Kullanıcının yazdığı metni al
-        text = message.text.replace('/yaz', '').strip()
+        text = message.text.replace('/proxy', '').strip()
 
         if not text:  # Eğer kullanıcı metin girmezse
-            bot.reply_to(message, "⚠️ Lütfen bir metin girin!\n\nÖrnek: `/yaz Merhaba Dünya`", parse_mode="Markdown")
+            bot.reply_to(message, "⚠️ KULLANIM !\n\n Örnek: [ /proxy ]", parse_mode="Markdown")
             return
 
         # API'nin formatına uygun hale getiriyoruz
         formatted_text = text.replace(' ', '%20')
 
         # API'nin URL'sini oluşturuyoruz
-        api_url = f'http://apis.xditya.me/write?text={formatted_text}'
+        api_url = f'https://cerenyaep.serv00.net/client/app/proxy/data.php?data=random'
 
         # API'ye istek gönderiyoruz
         response = requests.get(api_url)
