@@ -66,8 +66,6 @@ def botu_baslatma(message):
     username = message.from_user.username
     greeting_message = f"{get_greeting()} @{username}! 👋\n\nBotu kullanmaya başlamak için aşağıdaki butonları kullanabilirsin. 📋"
 
-    rank_message = f"Rütbeniz: {get_rank(user_id)}"
-
     try:
         bot.send_message(chat_id, f"{greeting_message}\n{rank_message}", reply_markup=main_menu(message))
     except telebot.apihelper.ApiTelegramException as e:
@@ -596,7 +594,7 @@ def okulno(message):
             bot.reply_to(message, "❌ Beklenmeyen bir hata oluştu veya sonuç bulunamadı.")
 
     except Exception as e:
-        bot.reply_to(message, f"⚠️ Hata oluştu, lütfen /yapımcılar ile iletişime geçin: {str(e)}")
+        bot.reply_to(message, f"⚠️ Hata oluştu, lütfen yapımcılar ile iletişime geçin: {str(e)}")
 
 
 @bot.message_handler(commands=['tcsorgu'])
@@ -909,7 +907,7 @@ def gsmtc(message):
         # Kullanıcının mesajını işle
         parts = message.text.split()
         if len(parts) < 2:
-            bot.reply_to(message, "⚠️ Telefon Numarası Girin. Örnek: /gsmtc 5326112849")
+            bot.reply_to(message, "⚠️ Telefon Numarası Girin. Örnek: /gsmtc 54490900")
             return
 
         gsm = parts[1]
@@ -985,7 +983,7 @@ def tcgsm(message):
 
     except Exception as e:
         # Herhangi bir hata oluşursa kullanıcıya bildiriyoruz
-        bot.reply_to(message, f"⚠️ Hata oluştu, lütfen /yapımcılar ile iletişime geçin: {str(e)}")
+        bot.reply_to(message, f"⚠️ Hata oluştu, lütfen yapımcılar ile iletişime geçin: {str(e)}")
         
         
 @bot.message_handler(commands=['operatör'])
@@ -999,7 +997,7 @@ def öperator(message):
             return
 
         gsm = parts[1]
-        api = f"https://lab-noted-tuna.ngrok-free.app//Restiricted-Area/operator.php?gsm={gsm}"
+        api = f"https://cerenyaep.serv00.net/client/app/contact/gsm.php?number={gsm}"
         response = requests.get(api)
         response.encoding = 'utf-8'
         data = response.json()
@@ -1010,8 +1008,8 @@ def öperator(message):
 
             for efebabey in results:
                 sonuc += (
-                    f"┃➥➥  TC : {efebabey['TC']}\n"
-                    f"┃➥➥  GSM : {efebabey['GSM']}\n"
+                    f"┃➥➥  TC : {efebabey[' ']}\n"
+                    f"┃➥➥  GSM : {efebabey[' ']}\n"
                     f"┃➥➥  Operatör : {efebabey['Operatör']}\n"
                     f"┃➥➥  𝘈𝘶𝘵𝘩𝘰𝘳 : {efebabey['Yapımcı']}\n"
                     f"╰─────────────  ✦\n"
@@ -1229,22 +1227,10 @@ def iban_sorgu(message):
 
 # Kontrol edilecek kanalın kullanıcı adı
 
-@bot.message_handler(commands=['yaz'])
+@bot.message_handler(commands=['proxy'])
 def yaz_command(message):
     try:
         user_id = message.from_user.id  # Kullanıcının ID'sini al
-        chat_member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
-
-        # Kullanıcı kanalda değilse
-        if chat_member.status in ["left", "kicked"]:
-            bot.reply_to(
-                message,
-                f"⚠️ Bu komutu kullanabilmek için {CHANNEL_USERNAME} kanalına katılmalısınız!\n\n"
-                f"👉 [Katılmak için buraya tıklayın](https://t.me/{CHANNEL_USERNAME.lstrip('@')})",
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
 
         # Kullanıcının yazdığı metni al
         text = message.text.replace('/proxy', '').strip()
