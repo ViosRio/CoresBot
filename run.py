@@ -66,13 +66,6 @@ def botu_baslatma(message):
     username = message.from_user.username
     greeting_message = f"{get_greeting()} @{username}! 👋\n\nBotu kullanmaya başlamak için aşağıdaki butonları kullanabilirsin. 📋"
 
-    try:
-        bot.send_message(chat_id, f"{greeting_message}\n{rank_message}", reply_markup=main_menu(message))
-    except telebot.apihelper.ApiTelegramException as e:
-        if "Forbidden: user is deactivated" in str(e):
-            print(f"Kullanıcı devre dışı: {user_id}")
-            return
-
 # Ana Menü
 def main_menu(message):
     markup = types.InlineKeyboardMarkup()
