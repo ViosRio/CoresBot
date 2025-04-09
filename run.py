@@ -1259,15 +1259,6 @@ def doviz(message):
     try:
         user_id = message.from_user.id  # Kullanıcının ID'sini al
 
-        # Kullanıcı kanalda değilse
-        if chat_member.status in ["left", "kicked"]:
-            bot.reply_to(
-                message
-                parse_mode="Markdown",
-                disable_web_page_preview=True
-            )
-            return  # Kullanıcı kanala katılmadığı için işlemi durdur
-
         # API'den dolar kuru verisini çek
         response = requests.get("https://tilki.dev/api/dolar")
 
@@ -1303,10 +1294,8 @@ def euro(message):
         bot.send_message(message.chat.id, f"*⚠️ Bir hata oluştu:* `{e}`", parse_mode="Markdown")
 
 
-
-# Kontrol edilecek kanalın kullanıcı adı
-
-    except Exception as e:
+# FİNİSH
+except Exception as e:
         bot.send_message(message.chat.id, f"*⚠️ Bir hata oluştu:* `{e}`", parse_mode="Markdown")
 
 bot.polling()
