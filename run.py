@@ -1033,7 +1033,7 @@ SMS_APIS = [
     {"name": "Abalone", "url": "https://abalone-nasal-vault.glitch.me/sms?phone="},
     {"name": "Camel", "url": "https://impartial-thorn-camel.glitch.me/sms?phone="},
     {"name": "Trouble", "url": "https://understood-sincere-trouble.glitch.me/sms?phone="},
-    {"name": "Amber", "url": "https://separated-amber-girl.glitch.me/sms?phone="}
+    {"name": "Amber", "url": "https://separated-amber-girl.glitch.me/sms?phone="},
     {"name": "Kredim", "url": "https://cerenyaep.serv00.net/client/app/tbomb/data.php?number="}
 ]
 
