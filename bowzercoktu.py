@@ -14,7 +14,7 @@ from datetime import datetime
 from io import BytesIO
 
 
-TOKEN = "7250474297:AAHJLlK4VbnOH-dHXvjbFdza9524JPQKhyY"
+TOKEN = "{TOKEN}"
 bot = telebot.TeleBot(TOKEN)
         
         
