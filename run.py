@@ -1064,7 +1064,6 @@ def handle_sms(message):
 
         phone = message.text.split()[1]
         
-        # Gelişmiş numara doğrulama
         if not (phone.isdigit() and len(phone) == 10 and phone.startswith('5')):
             bot.reply_to(message, "❌ Geçersiz numara! 10 haneli TR numarası (5 ile başlamalı)")
             return
