@@ -63,17 +63,8 @@ def botu_baslatma(message):
     user_id = message.from_user.id
     chat_id = message.chat.id
 
-    try:
-        bot.send_video(chat_id, video_url)
-    except telebot.apihelper.ApiTelegramException as e:
-        if "Forbidden: user is deactivated" in str(e):
-            print(f"Kullanıcı devre dışı: {user_id}")
-            return
-
     username = message.from_user.username
     greeting_message = f"{get_greeting()} @{username}! 👋\n\nBotu kullanmaya başlamak için aşağıdaki butonları kullanabilirsin. 📋"
-
-    rank_message = f"Rütbeniz: {get_rank(user_id)}"
 
     try:
         bot.send_message(chat_id, f"{greeting_message}\n{rank_message}", reply_markup=main_menu(message))
