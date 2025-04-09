@@ -501,7 +501,7 @@ def sorgu2(message):
         print(f"Kritik Hata: {str(e)}")
         bot.reply_to(message, "Sistem hatası oluştu. Lütfen yöneticiye bildirin.")
 
-import request
+import requests
 
 @bot.message_handler(commands=['vefat'])
 def vefat(message):
