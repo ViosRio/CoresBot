@@ -91,7 +91,7 @@ def main_menu(message):
 @bot.callback_query_handler(func=lambda call: call.data == "bilgi")
 def send_info(call):
     # Bilgi mesajını gönderiyoruz
-    info_message = "ℹ️ Merhaba! Ben Bowzer :\n\n💡 Amaç: Kullanıcıları bilgilendirmek ve çeşitli işlemleri kolaylaştırmak.\n\n 🔧 Yapımcı: @bowzer_sik\n\n👨‍💻 Bot Geliştiricisi: @bowzer_sik\n\n🌐 Servis API: Bowzer Check\n\n💬 Komutlar:\n   ➡️ /tc: TC bilgilerini sorgulamak.\n   ➡️ /sorgu: Ad Soyad İl İlçe İle TC bilgilerini sorgulamak.\n   ➡️ /sorgu2: Ad Soyad İl İle TC bilgilerini sorgulamak.\n   ➡️ /aile: Aile bilgilerini sorgulamak.\n   ➡️ /adres: TC ile Adres Bilgilerini sorgulamak.\n   ➡️ /okulno: TC ile Okul Bilgilerini sorgulamak.\n   ➡️ /vesika: TC ile Vesikalık Bilgilerini sorgulamak.\n   ➡️ /isyeri: TC ile İşyeri Bilgilerini sorgulamak.\n   ➡️ /yapımcılar: Yapımcı bilgilerini almak.\n\n⚙️ Bot hakkında herhangi bir sorunuz varsa, lütfen @bowzer_sik ile iletişime geçin."
+    info_message = "ℹ️ Merhaba! Ben Bowzer :\n\n💡 Amaç: Kullanıcıları bilgilendirmek ve çeşitli işlemleri kolaylaştırmak.\n\n 🔧 Yapımcı: @bowzer_sik\n\n👨‍💻 Bot Geliştiricisi: @bowzer_sik\n\n🌐 Servis API: Bowzer Check\n\n💬 Komutlar:\n\n   ➡️ /tc: TC bilgilerini sorgulamak.\n   ➡️ /sorgu: Ad Soyad İl Sorgulamak.\n   ➡️ /sorgu2: Ad Soyad V2.\n   ➡️ /aile: Aile bilgilerini.\n   ➡️ /adres: Adres Bilgilerini Sorgulamak.\n   ➡️ /okulno: Okul Bilgilerini Sorgulamak.\n   ➡️ /vesika: Vesikalık Bilgilerini Sorgulamak.\n   ➡️ /isyeri: İşyeri Bilgilerini Sorgulamak.\n   ⚙️ Bot hakkında herhangi bir sorunuz varsa, lütfen @bowzer_sik ile iletişime geçin."
     
     # Inline butonları hazırlıyoruz
     markup = types.InlineKeyboardMarkup()
@@ -1057,7 +1057,7 @@ def handle_sms(message):
     try:
         # Giriş kontrolü
         if len(message.text.split()) != 2:
-            bot.reply_to(message, "⚠️ Kullanım: /sms 5XXXXXXXXX\nÖrnek: /sms 5551234567")
+            bot.reply_to(message, "⚠️ Kullanım: \nÖrnek: [ /sms 54490900 ]")
             return
 
         phone = message.text.split()[1]
@@ -1230,7 +1230,6 @@ def iban_sorgu(message):
 def yaz_command(message):
     try:
         user_id = message.from_user.id  # Kullanıcının ID'sini al
-        chat_member = bot.get_chat_member(CHANNEL_USERNAME, user_id)
 
         # Kullanıcının yazdığı metni al
         text = message.text.replace('/yaz', '').strip()
